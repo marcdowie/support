@@ -41,7 +41,7 @@ Resources:
   DirectoryInsightsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: get-directoryinsights.zip
+      CodeUri: get-jcdirectoryinsights.zip
       Handler: get-jcdirectoryinsights.jc_directoryinsights
       MemorySize: 192
       Timeout: 180
