@@ -53,7 +53,7 @@ Resources:
           JCAPIKEY: !Sub ${JumpCloudApiKey}
           incrementType: !Sub ${IncrementType}
           incrementAmount: !Sub ${IncrementAmount}
-          BucketName: !Ref EventsBucket
+          BucketName: !Ref DirectoryInsightsBucket
       Events:
         GrabDirectoryInsights:
           Type: Schedule
