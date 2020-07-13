@@ -1,7 +1,7 @@
-# Gather JumpCloud Events with an AWS Serverless Application
+# Gather JumpCloud Directory Insights Data with an AWS Serverless Application
 _Note: This document assumes the use of Python 3+_
 ## Table of Contents
-- [Gather JumpCloud Events with an AWS Serverless Application](#gather-jumpcloud-events-with-an-aws-serverless-application)
+- [Gather JumpCloud Directory Insights Data with an AWS Serverless Application](#gather-jumpcloud-directory-insights-data-with-an-aws-serverless-application)
   - [Table of Contents](#table-of-contents)
   - [Pre-requisites](#pre-requisites)
   - [Create Python Script](#create-python-script)
@@ -67,28 +67,28 @@ Create a directory to store your Serverless Application and any dependencies req
 
 This Application requires `boto3`, and `requests`. Install these dependencies using pip3. Within the directory you created, run the following commands to install the dependencies within the directory.
 ```bash
-~/jc-events$ pip3 install boto3 -t .
-~/jc-events$ pip3 install requests -t .
+~/jc-directoryinsights$ pip3 install boto3 -t .
+~/jc-directoryinsights$ pip3 install requests -t .
 ```
 
 Create a ZIP archive of the Python script and the dependencies.
 ```
-~/jc-events$ zip -r get-jcevents.zip .
+~/jc-directoryinsights$ zip -r get-jcdirectoryinsights.zip .
 ```
 
 ## Create SAM Template
 
 In the root of your directory, create a SAM template named [serverless.yaml](https://github.com/TheJumpCloud/support-admin-tools/blob/master/Kyles%20Stuff/AWS%20SAM/python/JumpCloud%20Events/serverless.yaml).
 
-_Note: The example template provided assumes that you have named your ZIP file get-jcevents.zip. If this is not true, update the `CodeUri` property to reflect the correct name._ \
-_This also assumes the name of your Python script is named get-jcevents.py and the `def` in your python script is named jc_events. If neither of these is true, update the `Handler` property to match a <script_name>.<def_name> format._
+_Note: The example template provided assumes that you have named your ZIP file get-jcdirectoryinsights.zip. If this is not true, update the `CodeUri` property to reflect the correct name._ \
+_This also assumes the name of your Python script is named get-jcdirectoryinsights.py and the `def` in your python script is named jc_directoryinsights. If neither of these is true, update the `Handler` property to match a <script_name>.<def_name> format._
 
 ## Package and Deploy the Application
 
 ### Packaging the Application
 Using the AWS SAM CLI, package your application. This will upload your ZIP archive and `serverless.yaml` file to an S3 bucket. It will also create a file named `packaged.yaml` in your directory. `packaged.yaml` is an updated version of the SAM template that you provided that now directs to your S3 bucket and the script and dependencies now stored within it.
 ```
-~/jc-events$ sam package --template-file serverless.yaml --output-template-file packaged.yaml --s3-bucket <YOUR S3 BUCKET>
+~/jc-directoryinsights$ sam package --template-file serverless.yaml --output-template-file packaged.yaml --s3-bucket <YOUR S3 BUCKET>
 ```
 _Note: Provide the name of the S3 bucket that you created for packaging and storing your application._
 
@@ -97,7 +97,7 @@ _Note: Provide the name of the S3 bucket that you created for packaging and stor
 
 Using the AWS CLI, you can [deploy](https://docs.aws.amazon.com/cli/latest/reference/cloudformation/deploy/index.html) your template directly from your terminal.
 ```
-~/jc-events$ aws cloudformation deploy --template-file ./packaged.yaml --stack-name <YOUR STACK NAME> --parameter-overrides JumpCloudApiKey=<API KEY> KmsKeyArn=<CMK ARN> RoleArn=<ROLE ARN> IncrementType=<INCREMENT TYPE> IncrementAmount=<INCREMENT AMOUNT>
+~/jc-directoryinsights$ aws cloudformation deploy --template-file ./packaged.yaml --stack-name <YOUR STACK NAME> --parameter-overrides JumpCloudApiKey=<API KEY> KmsKeyArn=<CMK ARN> RoleArn=<ROLE ARN> IncrementType=<INCREMENT TYPE> IncrementAmount=<INCREMENT AMOUNT>
 ```
 _Note: IncrementType accepts "minute", "minutes", "hour", "hours", "day", and "days". Use the singular if the IncrementAmount is "1"._
 
@@ -107,6 +107,6 @@ Rather than deploying your Application from the CLI, you can also publish your a
 
 Using the AWS SAM CLI, publish your application to the Serverless Applications Repository.
 ```
-~/jc-events$ sam publish --template packaged.yaml --region <REGION>
+~/jc-directorys$ sam publish --template packaged.yaml --region <REGION>
 ```
 Once you have published your Application to the [Severless Application Repository](https://console.aws.amazon.com/serverlessrepo/), you can find and deploy your application from the Private Applications tab.
