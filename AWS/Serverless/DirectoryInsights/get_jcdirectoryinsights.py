@@ -28,7 +28,7 @@ def jc_directoryinsights(event, context):
 
     fileStartDate = datetime.datetime.strftime(start_dt, "%m-%d-%YT%H-%M-%SZ")
     fileEndDate = datetime.datetime.strftime(now, "%m-%d-%YT%H-%M-%SZ")
-    outfileName = "jcevents" + fileEndDate + "_" + fileStartDate + ".json.gz"
+    outfileName = "jc_directoryinsights_" + fileStartDate + "_" + fileEndDate + ".json.gz"
 
     url = "https://api.jumpcloud.com/insights/directory/v1/events"
 
