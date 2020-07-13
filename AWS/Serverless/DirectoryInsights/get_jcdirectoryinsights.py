@@ -1,6 +1,6 @@
 import requests, datetime, json, boto3, os, gzip
 
-def jc_events(event, context):
+def jc_directoryinsights(event, context):
     jcapikey = os.environ['JCAPIKEY']
     incrementType = os.environ['incrementType']
     incrementAmount = int(os.environ['incrementAmount'])
@@ -30,17 +30,22 @@ def jc_events(event, context):
     fileEndDate = datetime.datetime.strftime(now, "%m-%d-%YT%H-%M-%SZ")
     outfileName = "jcevents" + fileEndDate + "_" + fileStartDate + ".json.gz"
 
-    url = "https://events.jumpcloud.com/events"
+    url = "https://api.jumpcloud.com/insights/directory/v1/events"
 
-    payload = "startDate=" + start_date + "&endDate=" + end_date
+    body = {
+        'service': ["all"],
+        'start_time': start_date,
+        'end_time': end_date,
+        "limit": 10000
+    }
     headers = {
         'x-api-key': jcapikey,
         'content-type': "application/json",
         }
 
     try:
-        response = requests.request("GET", url, params=payload, headers=headers)
-        response = json.loads(response.text)
+        response = requests.post(url, json=body, headers=headers)
+        responseBody = json.loads(response.text)
     except (requests.exceptions.RequestException, requests.exceptions.HTTPError) as e:
         raise Exception(e)
         exit(1)
@@ -49,8 +54,19 @@ def jc_events(event, context):
         raise Exception("There have been no events in the last {0} {1}.".format(incrementAmount, incrementType))
         return 
 
+    data = responseBody
+
+    while (response.headers["X-Result-Count"] >= response.headers["X-Limit"]):
+        body["search_after"] = json.loads(response.headers["X-Search_After"])
+        try:
+            response = requests.post(url, json=body, headers=headers)
+            responseBody = json.loads(response.text)
+            data = data + responseBody
+        except (requests.exceptions.RequestException, requests.exceptions.HTTPError) as e:
+            raise Exception(e)
+        
     gzOutfile = gzip.GzipFile(filename="/tmp/" + outfileName, mode="w", compresslevel=9)
-    gzOutfile.write(json.dumps(response, indent=4).encode("UTF-8"))
+    gzOutfile.write(json.dumps(data, indent=2))
     gzOutfile.close()
 
     s3 = boto3.client('s3')
