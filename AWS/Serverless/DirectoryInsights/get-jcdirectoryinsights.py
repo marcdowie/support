@@ -21,7 +21,8 @@ def jc_directoryinsights(event, context):
     elif incrementType == "day":
         start_dt = now - datetime.timedelta(days=incrementAmount)
     else:
-        print("Unknown increment value.")
+        raise Exception("Unknown increment value.")
+        return
 
     start_date = start_dt.isoformat("T") + "Z"
     end_date = now.isoformat("T") + "Z"
@@ -50,7 +51,7 @@ def jc_directoryinsights(event, context):
         raise Exception(e)
         exit(1)
 
-    if response is None:
+    if response.text.strip() == "[]":
         raise Exception("There have been no events in the last {0} {1}.".format(incrementAmount, incrementType))
         return 
 
