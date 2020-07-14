@@ -68,7 +68,7 @@ def jc_directoryinsights(event, context):
             exit(1)
         
     gzOutfile = gzip.GzipFile(filename="/tmp/" + outfileName, mode="w", compresslevel=9)
-    gzOutfile.write(json.dumps(data, indent=2))
+    gzOutfile.write(json.dumps(data, indent=2).encode("UTF-8"))
     gzOutfile.close()
 
     s3 = boto3.client('s3')
