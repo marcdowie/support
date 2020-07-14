@@ -63,7 +63,7 @@ _Note: This document assumes the use of Python 3+_
   
 ## Create Python Script
 
-Create a directory to store your Serverless Application and any dependencies required. In the root of that directory create your [Python Script](https://github.com/TheJumpCloud/support-admin-tools/blob/master/Kyles%20Stuff/AWS%20SAM/python/JumpCloud%20Events/get-jcevents.py).
+Create a directory to store your Serverless Application and any dependencies required. In the root of that directory create your [Python Script](https://github.com/TheJumpCloud/support/blob/SA-1258-DI-Serverless/AWS/Serverless/DirectoryInsights/get-jcdirectoryinsights.py).
 
 This Application requires `boto3`, and `requests`. Install these dependencies using pip3. Within the directory you created, run the following commands to install the dependencies within the directory.
 ```bash
@@ -78,7 +78,7 @@ Create a ZIP archive of the Python script and the dependencies.
 
 ## Create SAM Template
 
-In the root of your directory, create a SAM template named [serverless.yaml](https://github.com/TheJumpCloud/support-admin-tools/blob/master/Kyles%20Stuff/AWS%20SAM/python/JumpCloud%20Events/serverless.yaml).
+In the root of your directory, create a SAM template named [serverless.yaml](https://github.com/TheJumpCloud/support/blob/SA-1258-DI-Serverless/AWS/Serverless/DirectoryInsights/serverless.yaml).
 
 _Note: The example template provided assumes that you have named your ZIP file get-jcdirectoryinsights.zip. If this is not true, update the `CodeUri` property to reflect the correct name._ \
 _This also assumes the name of your Python script is named get-jcdirectoryinsights.py and the `def` in your python script is named jc_directoryinsights. If neither of these is true, update the `Handler` property to match a <script_name>.<def_name> format._
