@@ -42,6 +42,7 @@ def jc_directoryinsights(event, context):
     headers = {
         'x-api-key': jcapikey,
         'content-type': "application/json",
+        'user-agent': "JumpCloud_AWSServerless.DirectoryInsights/0.0.1"
         }
 
     try:
